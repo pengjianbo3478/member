@@ -1,0 +1,767 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gl365.member.mapper.UserMapper">
+	<resultMap id="BaseResultMap" type="com.gl365.member.model.User">
+		<id column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="real_name" property="realName" jdbcType="VARCHAR" />
+		<result column="english_name" property="englishName" jdbcType="VARCHAR" />
+		<result column="nick_name" property="nickName" jdbcType="VARCHAR" />
+		<result column="password" property="password" jdbcType="VARCHAR" />
+		<result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+		<result column="sex" property="sex" jdbcType="INTEGER" />
+		<result column="birthday" property="birthday" jdbcType="DATE" />
+		<result column="cert_type" property="certType" jdbcType="INTEGER" />
+		<result column="cert_num" property="certNum" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="signature" property="signature" jdbcType="VARCHAR" />
+		<result column="photo" property="photo" jdbcType="VARCHAR" />
+		<result column="province" property="province" jdbcType="INTEGER" />
+		<result column="city" property="city" jdbcType="INTEGER" />
+		<result column="district" property="district" jdbcType="INTEGER" />
+		<result column="town" property="town" jdbcType="INTEGER" />
+		<result column="register_type" property="registerType"
+			jdbcType="INTEGER" />
+		<result column="register_time" property="registerTime"
+			jdbcType="TIMESTAMP" />
+		<result column="auth_status" property="authStatus" jdbcType="INTEGER" />
+		<result column="recommend_by" property="recommendBy" jdbcType="VARCHAR" />
+		<result column="recommend_shop_manager" property="recommendShopManager"
+			jdbcType="VARCHAR" />
+		<result column="recommend_agent_type" property="recommendAgentType"
+			jdbcType="VARCHAR" />
+		<result column="recommend_agent_id" property="recommendAgentId"
+			jdbcType="VARCHAR" />
+		<result column="last_login_datetime" property="lastLoginDatetime"
+			jdbcType="TIMESTAMP" />
+		<result column="last_login_ip" property="lastLoginIp" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+		<result column="modify_by" property="modifyBy" jdbcType="VARCHAR" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="enable_happycoin" property="enableHappycoin"
+			jdbcType="BIT" />
+		<result column="account_protect" property="accountProtect"
+			jdbcType="BIT" />
+		<result column="buy_status" property="buyStatus" jdbcType="BIT" />
+		<result column="id_address" property="idAddress" jdbcType="VARCHAR" />
+		<result column="activeId" property="activeId" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="UserInfoResultMap" type="com.gl365.member.dto.users.UserInfoDto">
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="real_name" property="userName" jdbcType="VARCHAR" />
+		<result column="mobile_phone" property="telphone" jdbcType="VARCHAR" />
+		<result column="photo" property="imgUrl" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<resultMap id="UserRealNameInfoMap" type="com.gl365.member.dto.users.UserRealNameInfo">
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="real_name" property="realName" jdbcType="VARCHAR" />
+		<result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+		<result column="cert_type" property="certType" jdbcType="INTEGER" />
+		<result column="cert_num" property="certNum" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="UserRltForSDtoResultMap" type="com.gl365.member.dto.users.UserRltForSDto">
+   	 	<result column="recommend_agent_type" property="recommendAgentT" jdbcType="VARCHAR" />
+   	 	<result column="recommend_agent_id" property="recommendAgentId" jdbcType="VARCHAR" />
+   	 	<result column="totalCount" property="totalCount" jdbcType="INTEGER" />
+    </resultMap>
+    
+	<resultMap id="UserInfotForSDtoResultMap" type="com.gl365.member.dto.users.UserInfotForSDto">
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="nick_name" property="realName" jdbcType="VARCHAR" />
+		<result column="mobile_phone" property="mobilePhone" jdbcType="VARCHAR" />
+		<result column="register_time" property="registerTime" jdbcType="TIMESTAMP" />
+		<result column="photo" property="photo" jdbcType="VARCHAR" />
+    </resultMap>
+
+	<resultMap id="InviteUserCountForMResultMap" type="com.gl365.member.dto.manage.InviteUserCount">
+		<result column="recommend_by" property="userId" jdbcType="VARCHAR" />
+		<result column="count" property="count" jdbcType="INTEGER" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+		user_id, real_name, english_name, nick_name, password, mobile_phone, sex,
+		birthday,
+		cert_type, cert_num, email, level, signature, photo, province, city, district,
+		town,
+		register_type, register_time, auth_status, recommend_by, recommend_shop_manager,
+		recommend_agent_type, recommend_agent_id, last_login_datetime,
+		last_login_ip, status,id_address,activeId,
+		modify_time, modify_by, remark, enable_happycoin, account_protect, buy_status
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</select>
+	<select id="getUserInfoByMobilePhone" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from user
+		where mobile_phone = #{mobilePhone,jdbcType=VARCHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from user
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="insertSelective" parameterType="com.gl365.member.model.User">
+		insert into user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="realName != null">
+				real_name,
+			</if>
+			<if test="englishName != null">
+				english_name,
+			</if>
+			<if test="nickName != null">
+				nick_name,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="mobilePhone != null">
+				mobile_phone,
+			</if>
+			<if test="sex != null">
+				sex,
+			</if>
+			<if test="birthday != null">
+				birthday,
+			</if>
+			<if test="certType != null">
+				cert_type,
+			</if>
+			<if test="certNum != null">
+				cert_num,
+			</if>
+			<if test="email != null">
+				email,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="signature != null">
+				signature,
+			</if>
+			<if test="photo != null">
+				photo,
+			</if>
+			<if test="province != null">
+				province,
+			</if>
+			<if test="city != null">
+				city,
+			</if>
+			<if test="district != null">
+				district,
+			</if>
+			<if test="town != null">
+				town,
+			</if>
+			<if test="registerType != null">
+				register_type,
+			</if>
+			<if test="registerTime != null">
+				register_time,
+			</if>
+			<if test="authStatus != null">
+				auth_status,
+			</if>
+			<if test="recommendBy != null">
+				recommend_by,
+			</if>
+			<if test="recommendShopManager != null">
+				recommend_shop_manager,
+			</if>
+			<if test="recommendAgentType != null">
+				recommend_agent_type,
+			</if>
+			<if test="recommendAgentId != null">
+				recommend_agent_id,
+			</if>
+			<if test="lastLoginDatetime != null">
+				last_login_datetime,
+			</if>
+			<if test="lastLoginIp != null">
+				last_login_ip,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="modifyTime != null">
+				modify_time,
+			</if>
+			<if test="modifyBy != null">
+				modify_by,
+			</if>
+			<if test="remark != null">
+				remark,
+			</if>
+			<if test="enableHappycoin != null">
+				enable_happycoin,
+			</if>
+			<if test="accountProtect != null">
+				account_protect,
+			</if>
+			<if test="buyStatus != null">
+				buy_status,
+			</if>
+			<if test="idAddress != null">
+				id_address,
+			</if>
+			<if test="activeId != null">
+				activeId,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="realName != null">
+				#{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="englishName != null">
+				#{englishName,jdbcType=VARCHAR},
+			</if>
+			<if test="nickName != null">
+				#{nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				#{password,jdbcType=VARCHAR},
+			</if>
+			<if test="mobilePhone != null">
+				#{mobilePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				#{sex,jdbcType=INTEGER},
+			</if>
+			<if test="birthday != null">
+				#{birthday,jdbcType=DATE},
+			</if>
+			<if test="certType != null">
+				#{certType,jdbcType=INTEGER},
+			</if>
+			<if test="certNum != null">
+				#{certNum,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+			<if test="signature != null">
+				#{signature,jdbcType=VARCHAR},
+			</if>
+			<if test="photo != null">
+				#{photo,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				#{province,jdbcType=INTEGER},
+			</if>
+			<if test="city != null">
+				#{city,jdbcType=INTEGER},
+			</if>
+			<if test="district != null">
+				#{district,jdbcType=INTEGER},
+			</if>
+			<if test="town != null">
+				#{town,jdbcType=INTEGER},
+			</if>
+			<if test="registerType != null">
+				#{registerType,jdbcType=INTEGER},
+			</if>
+			<if test="registerTime != null">
+				#{registerTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="authStatus != null">
+				#{authStatus,jdbcType=INTEGER},
+			</if>
+			<if test="recommendBy != null">
+				#{recommendBy,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendShopManager != null">
+				#{recommendShopManager,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendAgentType != null">
+				#{recommendAgentType,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendAgentId != null">
+				#{recommendAgentId,jdbcType=VARCHAR},
+			</if>
+			<if test="lastLoginDatetime != null">
+				#{lastLoginDatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastLoginIp != null">
+				#{lastLoginIp,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="modifyTime != null">
+				#{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				#{modifyBy,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="enableHappycoin != null">
+				#{enableHappycoin,jdbcType=BIT},
+			</if>
+			<if test="accountProtect != null">
+				#{accountProtect,jdbcType=BIT},
+			</if>
+			<if test="buyStatus != null">
+				#{buyStatus,jdbcType=BIT},
+			</if>
+			<if test="idAddress != null">
+				id_address = #{idAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="activeId != null">
+				activeId = #{activeId,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	
+	<!-- 更新会员初次交易标识 -->
+	<update id="updateUserTransFlag" parameterType="java.lang.String">
+		update user 
+		set buy_status = 1 
+		where user_id = #{userId}
+		and buy_status = 0
+	</update>
+	
+	<update id="updateByPrimaryKeySelective" parameterType="com.gl365.member.model.User">
+		update user
+		<set>
+			<if test="realName != null">
+				real_name = #{realName,jdbcType=VARCHAR},
+			</if>
+			<if test="englishName != null">
+				english_name = #{englishName,jdbcType=VARCHAR},
+			</if>
+			<if test="nickName != null">
+				nick_name = #{nickName,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="mobilePhone != null">
+				mobile_phone = #{mobilePhone,jdbcType=VARCHAR},
+			</if>
+			<if test="sex != null">
+				sex = #{sex,jdbcType=INTEGER},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday,jdbcType=DATE},
+			</if>
+			<if test="certType != null">
+				cert_type = #{certType,jdbcType=INTEGER},
+			</if>
+			<if test="certNum != null">
+				cert_num = #{certNum,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=INTEGER},
+			</if>
+			<if test="signature != null">
+				signature = #{signature,jdbcType=VARCHAR},
+			</if>
+			<if test="photo != null">
+				photo = #{photo,jdbcType=VARCHAR},
+			</if>
+			<if test="province != null">
+				province = #{province,jdbcType=INTEGER},
+			</if>
+			<if test="city != null">
+				city = #{city,jdbcType=INTEGER},
+			</if>
+			<if test="district != null">
+				district = #{district,jdbcType=INTEGER},
+			</if>
+			<if test="town != null">
+				town = #{town,jdbcType=INTEGER},
+			</if>
+			<if test="registerType != null">
+				register_type = #{registerType,jdbcType=INTEGER},
+			</if>
+			<if test="registerTime != null">
+				register_time = #{registerTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="authStatus != null">
+				auth_status = #{authStatus,jdbcType=INTEGER},
+			</if>
+			<if test="recommendBy != null">
+				recommend_by = #{recommendBy,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendShopManager != null">
+				recommend_shop_manager = #{recommendShopManager,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendAgentType != null">
+				recommend_agent_type = #{recommendAgentType,jdbcType=VARCHAR},
+			</if>
+			<if test="recommendAgentId != null">
+				recommend_agent_id = #{recommendAgentId,jdbcType=VARCHAR},
+			</if>
+			<if test="lastLoginDatetime != null">
+				last_login_datetime = #{lastLoginDatetime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="lastLoginIp != null">
+				last_login_ip = #{lastLoginIp,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="modifyTime != null">
+				modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyBy != null">
+				modify_by = #{modifyBy,jdbcType=VARCHAR},
+			</if>
+			<if test="remark != null">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="enableHappycoin != null">
+				enable_happycoin = #{enableHappycoin,jdbcType=BIT},
+			</if>
+			<if test="accountProtect != null">
+				account_protect = #{accountProtect,jdbcType=BIT},
+			</if>
+			<if test="buyStatus != null">
+				buy_status = #{buyStatus,jdbcType=BIT},
+			</if>
+			<if test="idAddress != null">
+				id_address = #{idAddress,jdbcType=VARCHAR},
+			</if>
+			<if test="activeId != null">
+				activeId = #{activeId,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where user_id = #{userId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updatePassWordByOldPassWord" parameterType="java.util.Map">
+		update user set password = #{password} where user_id = #{userId}
+	</update>
+
+	<select id="queryIsRegisterByMobileNo" parameterType="java.lang.String"
+		resultType="java.lang.Boolean">
+		select 1 from user where mobile_phone = #{mobilePhone,jdbcType=VARCHAR}
+		limit 1
+	</select>
+
+	<select id="queryUserInfoListByUserIds" parameterType="java.util.List" resultMap="UserInfoResultMap">
+		select user_id,real_name,mobile_phone,photo
+		from user
+		where 1=1
+		<if test="userIdList != null">
+			and user_id in
+			<foreach collection="userIdList" item="userID" open="("
+				separator="," close=")">
+				#{userID}
+			</foreach>
+		</if>
+	</select>
+	
+	<select id="getUserByuserIdList" parameterType="java.util.List" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from user
+		where 1=1
+		<if test="userIdList != null">
+			and user_id in
+			<foreach collection="userIdList" item="userID" open="("
+				separator="," close=")">
+				#{userID}
+			</foreach>
+		</if>
+	</select>
+
+<!-- 根据商户号查所有粉丝 -->
+  <select id="getInviteCount" resultType="java.lang.Integer" parameterType="java.lang.String" >
+	select
+		count(0)
+	from 
+		user
+	where 1=1
+	<if test="recommendBy != null">
+		and recommend_by = #{recommendBy,jdbcType=VARCHAR}
+	</if>
+	<if test="recommendAgentId != null">
+		and recommend_agent_id = #{recommendAgentId,jdbcType=VARCHAR}
+	</if>
+	<if test="recommendAgentType != null">
+		and recommend_agent_type = #{recommendAgentType,jdbcType=VARCHAR}
+	</if>
+  </select>
+  <!-- 根据userId和时间查询所有粉丝 -->
+  <select id="getYesterdayCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	select
+		count(0)
+	from 
+		user
+	where DATE_FORMAT(register_time,'%Y-%m-%d') BETWEEN #{beginTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+	<if test="recommendBy != null">
+		and recommend_by = #{recommendBy,jdbcType=VARCHAR}
+	</if>
+	<if test="recommendAgentId != null">
+		and recommend_agent_id = #{recommendAgentId,jdbcType=VARCHAR}
+	</if>
+	<if test="recommendAgentType != null">
+		and recommend_agent_type = #{recommendAgentType,jdbcType=VARCHAR}
+	</if>
+  </select>
+  
+  
+  <select id="getChannelUserCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	   select count(0)
+		 from user
+		where status in(1,2)
+		  and recommend_agent_id = #{recommendAgentId,jdbcType=VARCHAR}
+		  and recommend_agent_type = #{recommendAgentType,jdbcType=VARCHAR}
+		<if test="mobilePhone != null">
+		  and mobile_phone  LIKE  CONCAT('%',#{mobilePhone,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="beginTime != null and endTime != null">
+	  		and DATE_FORMAT(register_time,'%Y-%m-%d') BETWEEN #{beginTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+	    </if>
+  </select>
+  
+  <select id="getChannelUserList" resultMap="UserInfotForSDtoResultMap" parameterType="java.util.Map">
+    select user_id,nick_name,mobile_phone,register_time,photo
+	 from user 
+	where status in(1,2)
+	  and recommend_agent_id = #{recommendAgentId,jdbcType=VARCHAR}
+	  and recommend_agent_type = #{recommendAgentType,jdbcType=VARCHAR}
+	  <if test="mobilePhone != null">
+		  and mobile_phone  LIKE  CONCAT('%',#{mobilePhone,jdbcType=VARCHAR},'%')
+	 </if>
+	  <if test="beginTime != null and endTime != null">
+	  	and DATE_FORMAT(register_time,'%Y-%m-%d') BETWEEN #{beginTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+	  </if>
+    limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+  </select>
+  
+  <select id="getRealNameInfo" resultMap="UserRealNameInfoMap" parameterType="java.lang.String">
+  	select user_id,real_name,mobile_phone,cert_type,cert_num
+  		from user
+  	where user_id = #{userId,jdbcType=VARCHAR}
+  </select>
+  
+ <select id="getUserInfoByIdCard" resultType="java.lang.Integer" parameterType="java.lang.String" >
+	   select count(0)
+		 from user
+		where cert_num = #{cardId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 根据机构类型和机构id,获取会员个数 ,提供给S端调用 -->
+  <select id="getChannelUserCountList" resultMap="UserRltForSDtoResultMap">
+		select 
+		recommend_agent_type,recommend_agent_id, count(1) totalCount
+		from user
+		where status in(1,2) 
+		  and recommend_agent_type = #{recommendAgentType}
+		<if test="recommendAgentIdList != null">
+			and recommend_agent_id in
+			<foreach collection="recommendAgentIdList" item="recommendAgentID" open="("
+				separator="," close=")">
+				#{recommendAgentID}
+			</foreach>
+		</if>
+		GROUP BY recommend_agent_type,recommend_agent_id
+	</select>
+  
+  <select id="getManageUserCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+	    select
+		   count(1)
+		 from user 
+		where 1 = 1
+		 <if test="mobilePhone != null">
+	  		<!-- and mobile_phone = #{mobilePhone,jdbcType=VARCHAR} -->
+	  		 AND (real_name  LIKE  CONCAT('%',#{mobilePhone},'%' ) or mobile_phone LIKE  CONCAT('%',#{mobilePhone},'%' ) )
+	  	 </if>
+		 <if test="realName != null">
+		 <!--  <bind name="realName" value="'%' + realName + '%'" />
+	  		and real_name like #{realName,jdbcType=VARCHAR} -->
+	  		 AND (real_name  LIKE  CONCAT('%',#{realName},'%' ) or mobile_phone LIKE  CONCAT('%',#{realName},'%' ) )
+	  	 </if>
+		 <if test="beginTime != null and endTime != null">
+	  		and DATE_FORMAT(register_time,'%Y-%m-%d %h:%i:%s') BETWEEN #{beginTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+	  	 </if>
+		 <if test="registerType != null">
+	  		AND register_type = #{registerType,jdbcType=INTEGER}
+	  	</if>
+		 <if test="recommendAgentType != null">
+	  		AND recommend_agent_type = #{recommendAgentType,jdbcType=VARCHAR}
+	  	</if>
+		 <if test="recommendAgentId != null">
+	  		AND recommend_agent_id = #{recommendAgentId,jdbcType=VARCHAR}
+	  	</if>
+	  	 <if test="status != null">
+			AND status = #{status,jdbcType=INTEGER}
+		</if>
+		<if test='channel == "pt"'>
+			AND NOT EXISTS (SELECT 1 FROM user_relation where user_relation.new_user_id = user.user_id)
+		</if>
+		<if test="activeId != null">
+	  		AND activeId = #{activeId,jdbcType=VARCHAR}
+	  	</if>
+		<if test="userId != null">
+	  		AND user_id = #{userId,jdbcType=VARCHAR}
+	  	</if>
+    </select>
+  
+    <select id="getManageUserList" resultMap="BaseResultMap" parameterType="java.util.Map">
+	    select
+		   <include refid="Base_Column_List" />
+		 from user 
+		where 1 = 1
+		 <if test="mobilePhone != null">
+	  		<!-- and mobile_phone = #{mobilePhone,jdbcType=VARCHAR} -->
+	  		 AND (real_name  LIKE  CONCAT('%',#{mobilePhone},'%' ) or mobile_phone LIKE  CONCAT('%',#{mobilePhone},'%' ) )
+	  	 </if>
+		 <if test="realName != null">
+		 <!--  <bind name="realName" value="'%' + realName + '%'" />
+	  		and real_name like #{realName,jdbcType=VARCHAR}  -->
+	  		 AND (real_name  LIKE  CONCAT('%',#{realName},'%' ) or mobile_phone LIKE  CONCAT('%',#{realName},'%' ) )
+	  	 </if>
+		 <if test="beginTime != null and endTime != null">
+	  		and DATE_FORMAT(register_time,'%Y-%m-%d %h:%i:%s') BETWEEN #{beginTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+	  	 </if>
+		 <if test="registerType != null">
+	  		AND register_type = #{registerType,jdbcType=INTEGER}
+	  	</if>
+		 <if test="recommendAgentType != null">
+	  		AND recommend_agent_type = #{recommendAgentType,jdbcType=VARCHAR}
+	  	</if>
+		 <if test="recommendAgentId != null">
+	  		AND recommend_agent_id = #{recommendAgentId,jdbcType=VARCHAR}
+	  	</if>
+	  	 <if test="status != null">
+			AND status = #{status,jdbcType=INTEGER}
+		</if>
+		<if test='channel == "pt"'>
+			AND NOT EXISTS (SELECT 1 FROM user_relation where user_relation.new_user_id = user.user_id)
+		</if>
+		 <if test="activeId != null">
+	  		AND activeId = #{activeId,jdbcType=VARCHAR}
+	  	</if>
+	  	<if test="userId != null">
+	  		AND user_id = #{userId,jdbcType=VARCHAR}
+	  	</if>
+	  	ORDER BY register_time DESC
+	    limit #{begin,jdbcType=INTEGER},#{end,jdbcType=INTEGER}
+    </select>
+    
+    <select id="getCountByAgentType" parameterType="java.util.List" resultType="java.lang.Integer">
+		select 
+		      count(1)
+		 from user
+		where status in(1,2) 
+		  and recommend_agent_type in
+			<foreach collection="typeList" item="type" open="(" separator="," close=")">
+				#{type}
+			</foreach>
+	</select>
+	
+	<select id="queryUserInfoForMCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+	   select count(0)
+		 from user
+		<if test="realName != null" >
+		<bind name="realName" value="'%' + realName + '%'" />
+			where real_name like #{realName,jdbcType=VARCHAR}
+      	</if>
+   </select>
+   <select id="queryUserInfoForM" resultMap="BaseResultMap" parameterType="java.util.Map" >
+	   select user_id,real_name
+		 from user
+		 <if test="realName != null" >
+		 <bind name="realName" value="'%' + realName + '%'" />
+			where real_name like #{realName,jdbcType=VARCHAR}
+      	</if>
+      	limit #{begin},#{end}
+   </select>
+	
+   <select id="queryUserInfoByRealName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+		select user_id,real_name,recommend_agent_id
+		  from user
+		 where real_name = #{realName}
+		   <if test="recommendAgentId != null">
+	  		and recommend_agent_id = #{recommendAgentId}
+	  	 </if>
+   </select>
+   
+   <select id="queryInviteUserDtoCount" resultType="java.lang.Integer" parameterType="java.util.Map" >
+		select 
+		      count(1)
+		 from user
+		where status in(1,2)
+		  and mobile_phone is not null
+		  <if test="recommendAgentId != null">
+		  and recommend_agent_id = #{recommendAgentId}
+	  	 </if>
+		<if test="recommendBys != null" >
+		  and recommend_by in
+			<foreach collection="recommendBys" item="recommendBy" open="(" separator="," close=")">
+				#{recommendBy}
+			</foreach>
+      	</if> 
+      	<if test="beginTime != null and endTime != null">
+	  		and DATE_FORMAT(register_time,'%Y-%m-%d') BETWEEN #{beginTime} and #{endTime}
+	  	 </if>
+   </select>
+   <select id="queryInviteUserDto" resultMap="BaseResultMap" parameterType="java.util.Map" >
+		select 
+		      <include refid="Base_Column_List" />
+		 from user
+		where status in(1,2)
+		  and mobile_phone is not null
+		  <if test="recommendAgentId != null">
+		  and recommend_agent_id = #{recommendAgentId}
+	  	 </if>
+		<if test="recommendBys != null" >
+		  and recommend_by in
+			<foreach collection="recommendBys" item="recommendBy" open="(" separator="," close=")">
+				#{recommendBy}
+			</foreach>
+      	</if> 
+      	<if test="beginTime != null and endTime != null">
+	  		and DATE_FORMAT(register_time,'%Y-%m-%d') BETWEEN #{beginTime} and #{endTime}
+	  	 </if>
+	  	 order by register_time desc
+	    limit #{begin},#{end}
+   </select>
+   
+   <select id="queryInviteUserCountForM" resultMap="InviteUserCountForMResultMap" parameterType="java.util.Map" >
+	SELECT	recommend_by, count(recommend_by) count
+	  FROM (
+	        SELECT recommend_by
+	          FROM user
+	         WHERE status IN (1, 2)
+	           AND mobile_phone IS NOT NULL
+	           AND recommend_agent_type = '5'
+	           AND recommend_agent_id = #{recommendAgentId}
+	           AND recommend_by in
+					<foreach collection="recommendBys" item="recommendBy" open="(" separator="," close=")">
+						#{recommendBy}
+					</foreach>
+	           ) t
+             GROUP BY t.recommend_by
+   </select>
+	
+</mapper>

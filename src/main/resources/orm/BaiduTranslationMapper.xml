@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gl365.member.mapper.BaiduTranslationMapper" >
+  <resultMap id="BaseResultMap" type="com.gl365.member.model.BaiduTranslation" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="merchant_shortname" property="merchantShortname" jdbcType="VARCHAR" />
+    <result column="translation_name" property="translationName" jdbcType="VARCHAR" />
+    <result column="search_name" property="searchName" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="modify_time" property="modifyTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, merchant_shortname, search_name, create_time, modify_time,translation_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from baidu_translation
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  
+   <select id="selectBySearchName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from baidu_translation
+    WHERE search_name LIKE  CONCAT('%',#{searchName},'%' )  ORDER BY create_time LIMIT 1
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from baidu_translation
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insertSelective" parameterType="com.gl365.member.model.BaiduTranslation" >
+    insert into baidu_translation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="merchantShortname != null" >
+        merchant_shortname,
+      </if>
+      <if test="searchName != null" >
+        search_name,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="modifyTime != null" >
+        modify_time,
+      </if>
+      <if test="translationName != null" >
+        translation_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantShortname != null" >
+        #{merchantShortname,jdbcType=VARCHAR},
+      </if>
+      <if test="searchName != null" >
+        #{searchName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="translationName != null" >
+        #{translationName,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gl365.member.model.BaiduTranslation" >
+    update baidu_translation
+    <set >
+      <if test="merchantShortname != null" >
+        merchant_shortname = #{merchantShortname,jdbcType=VARCHAR},
+      </if>
+      <if test="searchName != null" >
+        search_name = #{searchName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyTime != null" >
+        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="translationName != null" >
+        translation_name = #{translationName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

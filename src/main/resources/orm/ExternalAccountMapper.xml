@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gl365.member.mapper.ExternalAccountMapper">
+	<resultMap id="BaseResultMap" type="com.gl365.member.model.ExternalAccount">
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="external_channel" property="externalChannel"
+			jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="insertSelective" parameterType="com.gl365.member.model.ExternalAccount">
+		insert into external_account (user_id, external_channel,create_time)
+		values (#{userId,jdbcType=VARCHAR}, #{externalChannel,jdbcType=VARCHAR},now())
+	</insert>
+	
+	<select id="queryIsRegisterByUserId" parameterType="java.lang.String"
+		resultType="java.lang.Boolean">
+		select 1 from external_account where user_id = #{userId,jdbcType=VARCHAR} and external_channel= #{externalChannel,jdbcType=VARCHAR}
+		limit 1
+	</select>
+</mapper>

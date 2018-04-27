@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.gl365.member.mapper.AdMainMapper" >
+  <resultMap id="BaseResultMap" type="com.gl365.member.dto.ad.AdMainDto" >
+    <id column="ad_main_id" property="id" jdbcType="INTEGER" />
+    <result column="ad_name" property="adName" jdbcType="VARCHAR" />
+    <result column="ad_img" property="adImg" jdbcType="VARCHAR" />
+    <result column="ad_url" property="adUrl" jdbcType="VARCHAR" />
+    <result column="ad_contacts" property="adContacts" jdbcType="VARCHAR" />
+    <result column="ad_phone" property="adPhone" jdbcType="VARCHAR" />
+    <result column="ad_detail" property="adDetail" jdbcType="VARCHAR" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="audit_infor" property="auditInfor" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    ad_main_id, ad_name, ad_img, ad_url, ad_contacts, ad_phone, ad_detail, state, audit_infor
+  </sql>
+  
+   <insert id="insert" parameterType="com.gl365.member.dto.ad.AdMainDto" >
+    insert into ad_main (ad_name, ad_img, 
+      ad_url, ad_contacts, ad_phone, 
+      ad_detail, state, create_time, update_time)
+    values (#{adName,jdbcType=VARCHAR}, #{adImg,jdbcType=VARCHAR}, 
+      #{adUrl,jdbcType=VARCHAR}, #{adContacts,jdbcType=VARCHAR}, #{adPhone,jdbcType=VARCHAR}, 
+      #{adDetail,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER}, now(), now())
+  </insert>
+  
+  <!-- 根据id查询  -->
+  <select id="selectById" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from ad_main
+    where ad_main_id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="select" resultMap="BaseResultMap" parameterType="com.gl365.member.dto.ad.AdMainDto" >
+    select 
+    <include refid="Base_Column_List" />
+    from ad_main
+    where 1=1
+      <if test="adName != null and adName != ''" >
+         and ad_name like CONCAT('%',#{adName,jdbcType=VARCHAR},'%' )
+      </if>
+      <if test="state != null" >
+         and state = #{state,jdbcType=INTEGER}
+      </if>
+    order by create_time desc
+  </select>
+  
+  <update id="updateById" parameterType="com.gl365.member.dto.ad.AdMainDto" >
+    update ad_main
+    <set >
+      <if test="adName != null and adName != '' " >
+        ad_name = #{adName,jdbcType=VARCHAR},
+      </if>
+      <if test="adImg != null and adImg != '' " >
+        ad_img = #{adImg,jdbcType=VARCHAR},
+      </if>
+      <if test="adUrl != null and adUrl != '' " >
+        ad_url = #{adUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="adContacts != null and adContacts != '' " >
+        ad_contacts = #{adContacts,jdbcType=VARCHAR},
+      </if>
+      <if test="adPhone != null and adPhone != '' " >
+        ad_phone = #{adPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="adDetail != null and adDetail != '' " >
+        ad_detail = #{adDetail,jdbcType=VARCHAR},
+      </if>
+      <if test="state != null" >
+        state = #{state,jdbcType=INTEGER},
+      </if>
+      <if test="auditInfor != null and auditInfor != '' " >
+        audit_infor = #{auditInfor,jdbcType=VARCHAR},
+      </if>
+        update_time = now(),
+    </set>
+    where ad_main_id = #{id,jdbcType=INTEGER}
+  </update>
+  
+</mapper>

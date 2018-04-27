@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: member
+  cloud:
+    config:
+      name: ${spring.application.name}
+      uri: http://192.168.0.12:11111
+      
+      
+sms:
+  config:
+    expireTime: 600
+    smsCodeRedisLiveTime: 650
+    smsMaxCount: 10
+    countLimitCycleTime: 86400
+    smsCountRedisLiveTime: 86400
+  smsContext:
+    default: "您的验证码：%s，有效期%d分钟，请妥善保管，勿告知他人。"
+    register: "您的验证码：%s，有效期%d分钟，请妥善保管，勿告知他人。"
+    modifyPhoneNo: "您的验证码：%s，有效期%d分钟，请妥善保管，勿告知他人。"
+    login: "您的验证码：%s，有效期%d分钟，请妥善保管，勿告知他人。"
+    findLoginPwd: "您的验证码：%s，有效期%d分钟，请妥善保管，勿告知他人。"
+    bindOperator: "您的验证码：%s，有效期%d分钟，请妥善保管，勿告知他人。"
+    oldPhoneNo: "验证码：%s，您正在修改手机号，请勿向任何人提供您收到的短信验证码。"
+    setBankCard: "您的验证码：%s，有效期%d分钟，请妥善保管，勿告知他人。"
+      

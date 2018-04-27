@@ -1,0 +1,21 @@
+logging:
+  config: classpath:log4j2.yml  
+  
+sms:
+  config:
+    expireTime: 600
+    smsCodeRedisLiveTime: 650
+    smsMaxCount: 10
+    countLimitCycleTime: 86400
+    smsCountRedisLiveTime: 86400
+  smsContext:
+    default: "给乐验证码：%s，有效期:%d秒"
+    register: "给乐验证码：%s，有效期:%d秒"
+    modifyPhoneNo: "给乐验证码：%s，有效期:%d秒"
+    login: "给乐验证码：%s，有效期:%d秒"
+    findLoginPwd: "给乐验证码：%s，有效期:%d秒"
+    bindOperator: "给乐验证码：%s，有效期:%d秒"
+    
+member: 
+ image: 
+  prefix: https://gl365dev.oss-cn-shenzhen.aliyuncs.com

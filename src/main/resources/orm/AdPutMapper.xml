@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gl365.member.mapper.AdPutMapper">
+  <resultMap id="BaseResultMap" type="com.gl365.member.dto.ad.AdPutDto">
+    <id column="ad_put_id" jdbcType="INTEGER" property="id" />
+    <result column="ad_main_id" jdbcType="INTEGER" property="adMainID" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="place" jdbcType="INTEGER" property="place" />
+    <result column="put_detail" jdbcType="VARCHAR" property="putDetail" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="put_state" jdbcType="INTEGER" property="putState" />
+    <result column="ad_name" jdbcType="VARCHAR" property="adName" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  
+  <resultMap id="AdDetailMap" type="com.gl365.member.dto.ad.AdDetailDto">
+  	<id column="ad_main_id" jdbcType="INTEGER" property="adMainId" />
+  	<result column="ad_put_id" jdbcType="INTEGER" property="adPutId" />
+	<result column="ad_name" jdbcType="VARCHAR" property="adName" />
+	<result column="ad_img" jdbcType="VARCHAR"  property="adImg"/>
+    <result column="ad_url" jdbcType="VARCHAR"  property="adUrl"/>
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="place" jdbcType="INTEGER" property="place" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    ad_put_id, ad_main_id, start_time, end_time, place, put_detail, province, city, put_state, ad_name, remark
+  </sql>
+  
+  <sql id="AdDetail_Column_list">
+  	ad_main.ad_main_id As ad_main_id,
+  	ad_put.ad_put_id As ad_put_id,
+  	ad_main.ad_name As ad_name,
+  	ad_main.ad_img As ad_img,
+  	ad_main.ad_url As ad_url,
+  	ad_put.start_time As start_time,
+  	ad_put.end_time As end_time,
+  	ad_put.place As place,
+  	ad_put.city As city
+  </sql>
+
+	<insert id="insertBatch" parameterType="java.util.List">
+		insert into ad_put (ad_main_id, start_time, end_time, place,
+		put_detail, province, city, put_state, ad_name, remark, create_time,
+		update_time)
+		values 
+		<foreach collection="list" item="item" index="index" separator="," >  
+        (#{item.adMainID,jdbcType=INTEGER}, #{item.startTime,jdbcType=TIMESTAMP},
+		#{item.endTime,jdbcType=TIMESTAMP}, #{item.place,jdbcType=INTEGER},
+		#{item.putDetail,jdbcType=VARCHAR},
+		#{item.province,jdbcType=VARCHAR}, #{item.city,jdbcType=VARCHAR}, #{item.putState,jdbcType=INTEGER},
+		#{item.adName,jdbcType=VARCHAR}, #{item.remark,jdbcType=VARCHAR}, now(), now())  
+   		</foreach>  
+	</insert>
+  
+  <select id="queryByM" resultMap="BaseResultMap" parameterType="com.gl365.member.dto.ad.req.AdPutMReq">
+  	 select 
+	    <include refid="Base_Column_List" />
+	    from ad_put
+	    where 1=1
+	      <if test="adName != null and adName != ''" >
+	         and ad_name like CONCAT('%',#{adName,jdbcType=VARCHAR},'%' )
+	      </if>
+	      <if test="province != null" >
+	         and province = #{province,jdbcType=VARCHAR}
+	      </if>	    
+	      <if test="city != null" >
+	         and city = #{city,jdbcType=VARCHAR}
+	      </if>	    
+	      <if test="place != null" >
+	         and place = #{place,jdbcType=INTEGER}
+	      </if>	    
+	      <if test="putState != null" >
+	         and put_state = #{putState,jdbcType=INTEGER}
+	      </if>	    
+	      <if test="queryBegin != null and queryEnd != null" >
+		     <![CDATA[  and start_time < #{queryEnd,jdbcType=TIMESTAMP}
+		         		and end_time > #{queryBegin,jdbcType=TIMESTAMP}
+		     ]]>
+	      </if>	
+	   order by create_time desc
+  </select>
+  
+  <update id="updateById" parameterType="com.gl365.member.dto.ad.AdPutDto">
+  	 update ad_put
+	    <set >
+	      <if test="place != null" >
+	        place = #{place,jdbcType=INTEGER},
+	      </if>
+	      <if test="putState != null" >
+	        put_state = #{putState,jdbcType=INTEGER},
+	      </if>
+	      <if test="province != null" >
+	        province = #{province,jdbcType=VARCHAR},
+	      </if>
+	      <if test="city != null" >
+	        city = #{city,jdbcType=VARCHAR},
+	      </if>
+	        update_time = now(),
+	    </set>
+    where ad_put_id = #{id,jdbcType=INTEGER}
+  </update>
+
+	<select id="queryByC" resultMap="AdDetailMap"
+		parameterType="com.gl365.member.dto.ad.req.AdDetailReq">
+		select
+		<include refid="AdDetail_Column_list" />
+		from ad_main, ad_put
+		where ad_main.ad_main_id = ad_put.ad_main_id
+		and ad_put.put_state = 1
+		<if test="place != null">
+			and ad_put.place = #{place,jdbcType=INTEGER}
+		</if>
+		<if test="city != null">
+			and ad_put.city in (#{city,jdbcType=VARCHAR},1)
+		</if>
+		<if test="queryBegin != null and queryEnd != null">
+		     <![CDATA[  and ad_put.start_time < #{queryEnd,jdbcType=TIMESTAMP}
+		         		and ad_put.end_time > #{queryBegin,jdbcType=TIMESTAMP}
+		     ]]>
+		</if>
+		order by ad_put.city desc,ad_put.create_time desc
+	</select>
+  
+</mapper>
